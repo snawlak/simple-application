@@ -1,0 +1,13 @@
+apiVersion: 1
+
+providers:
+- name: 'StartupProvider'
+  orgId: 1
+  folder: 'main'
+  folderUid: 'b91d78ed-8521-4550-9ded-0242c2940b1c'
+  type: file
+  disableDeletion: true
+  editable: true
+  updateIntervalSeconds: 200
+  options:
+    path: /etc/grafana/provisioning/dashboards

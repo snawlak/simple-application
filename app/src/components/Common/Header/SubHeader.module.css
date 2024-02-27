@@ -1,0 +1,11 @@
+.sub-header {
+    /*background-color: white;*/
+}
+
+.title-buttons {
+    padding: 0 3rem 0 3rem;
+    text-transform: uppercase;
+    color: #192a56;
+    display: flex;
+}
+

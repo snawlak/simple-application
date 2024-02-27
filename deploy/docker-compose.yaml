@@ -1,0 +1,59 @@
+version: "3.8"
+services:
+  sa_api:
+    build: ./../api
+    container_name: sa_api
+    env_file:
+      - ./env/api.DEV.env
+    ports:
+      - '8080:8080'
+    depends_on:
+      - sa_db
+    volumes:
+      - ./volumes/sa-api-files:/app/uploads
+  sa_db:
+    image: 'postgres:16.1'
+    container_name: sa_db
+    volumes:
+      - ./volumes/db-data:/var/lib/postgresql/data
+    env_file:
+      - ./env/db.DEV.env
+    ports:
+      - '45432:5432'
+  sa_app:
+    build: ./../app
+    container_name: sa_app
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./env/app.DEV.env
+    depends_on:
+      - sa_api
+      - sa_reports
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - sa_api
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+  sa_reports:
+    image: grafana/grafana-enterprise
+    container_name: sa_reports
+    restart: unless-stopped
+    user: '0' #id -u
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./volumes/sa_reports:/var/lib/grafana
+      - ./provisioning/datasources:/etc/grafana/provisioning/datasources/
+      - ./provisioning/dashboards:/etc/grafana/provisioning/dashboards/
+    environment:
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+    depends_on:
+      - sa_db
+

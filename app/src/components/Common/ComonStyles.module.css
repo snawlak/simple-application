@@ -1,0 +1,10 @@
+.box {
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0 2px 15px -10px #bbb;
+    border-radius: 14px;
+}
+
+.datePickerWidth80 {
+    width: 80% !important;
+}
